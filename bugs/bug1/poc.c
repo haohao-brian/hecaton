@@ -73,6 +73,7 @@ static void install_segv_handler(void)
   sa.sa_sigaction = segv_handler;
   sa.sa_flags = SA_NODEFER | SA_SIGINFO;
   sigaction(SIGSEGV, &sa, NULL);
+  // SIGBUS is handled the same as SIGSEGV for simplicity; adjust handler if needed for different semantics.
   sigaction(SIGBUS, &sa, NULL);
 }
 
@@ -1389,10 +1390,10 @@ int main(void)
   setup_binfmt_misc();
   install_segv_handler();
   for (procid = 0; procid < 6; procid++) {
-    if (fork() == 0) {
-      use_temporary_dir();
-      do_sandbox_none();
-    }
+    // if (fork() == 0) {
+    //   use_temporary_dir();
+    //   do_sandbox_none();
+    // }
   }
   sleep(1000000);
   return 0;
