@@ -1,0 +1,174 @@
+[  328.272930][T15666] BUG: KASAN: slab-out-of-bounds in fbcon_get_font+0x2b2/0x5e0
+[  328.272934][T15666] Read of size 5 at addr ffff8881175ef40c by task poc.o/15666
+[  328.272935][T15666] 
+[  328.272940][T15666] CPU: 1 PID: 15666 Comm: poc.o Not tainted 5.5.0-rc6+ #1
+[  328.272942][T15666] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[  328.272943][T15666] Call Trace:
+[  328.272949][T15666]  dump_stack+0x197/0x21e
+[  328.272955][T15666]  print_address_description.constprop.0.cold+0xaf/0x329
+[  328.272959][T15666]  ? fbcon_get_font+0x2b2/0x5e0
+[  328.272963][T15666]  __kasan_report.cold+0x1b/0x35
+[  328.272967][T15666]  ? fbcon_get_font+0x2b2/0x5e0
+[  328.272971][T15666]  kasan_report+0x12/0x20
+[  328.272974][T15666]  check_memory_region+0x14d/0x1a0
+[  328.272978][T15666]  memcpy+0x24/0x50
+[  328.272982][T15666]  fbcon_get_font+0x2b2/0x5e0
+[  328.272986][T15666]  ? fbcon_resize+0x6c0/0x6c0
+[  328.272990][T15666]  con_font_op+0x22d/0x12b0
+[  328.272995][T15666]  ? lockdep_hardirqs_on+0x421/0x5e0
+[  328.272999][T15666]  ? con_write+0xb0/0xb0
+[  328.273004][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273009][T15666]  ? apparmor_capable+0x1ea/0x470
+[  328.273013][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273017][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273022][T15666]  ? security_capable+0x92/0xc0
+[  328.273027][T15666]  vt_ioctl+0x12cf/0x26b0
+[  328.273031][T15666]  ? vt_waitactive+0x390/0x390
+[  328.273036][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273039][T15666]  ? mark_lock+0xc2/0x1220
+[  328.273044][T15666]  ? tty_jobctrl_ioctl+0x50/0x1030
+[  328.273047][T15666]  ? vt_waitactive+0x390/0x390
+[  328.273051][T15666]  tty_ioctl+0x1079/0x16a0
+[  328.273055][T15666]  ? tty_fasync+0x390/0x390
+[  328.273059][T15666]  ? count_memcg_events.constprop.0+0xfb/0x1b0
+[  328.273063][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273066][T15666]  ? __lock_acquire+0x8a1/0x4e40
+[  328.273070][T15666]  ? prep_transhuge_page+0xa0/0xa0
+[  328.273074][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273079][T15666]  ? __fget+0x3a4/0x590
+[  328.273084][T15666]  ? tty_fasync+0x390/0x390
+[  328.273088][T15666]  do_vfs_ioctl+0x97a/0x14e0
+[  328.273092][T15666]  ? compat_ioctl_preallocate+0x220/0x220
+[  328.273096][T15666]  ? __fget+0x3c6/0x590
+[  328.273100][T15666]  ? do_dup2+0x4f0/0x4f0
+[  328.273104][T15666]  ? __sanitizer_cov_trace_const_cmp1+0x1a/0x20
+[  328.273110][T15666]  ? security_file_ioctl+0x8e/0xc0
+[  328.273114][T15666]  ksys_ioctl+0xab/0xd0
+[  328.273118][T15666]  __x64_sys_ioctl+0x73/0xb0
+[  328.273121][T15666]  ? trace_hardirqs_on+0x5b/0x80
+[  328.273125][T15666]  do_syscall_64+0xf6/0x240
+[  328.273130][T15666]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  328.273133][T15666] RIP: 0033:0x45648d
+[  328.273138][T15666] Code: c3 e8 67 22 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+[  328.273140][T15666] RSP: 002b:00007f3ed35cf0b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  328.273144][T15666] RAX: ffffffffffffffda RBX: 00007f3ed35cf640 RCX: 000000000045648d
+[  328.273146][T15666] RDX: 0000000020000140 RSI: 0000000000004b60 RDI: 0000000000000003
+[  328.273149][T15666] RBP: 00007f3ed35cf0e0 R08: 0000000000000000 R09: 0000000000000000
+[  328.273151][T15666] R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3ed35cf640
+[  328.273153][T15666] R13: 0000000000000016 R14: 0000000000418850 R15: 00007f3ed35af000
+[  328.273157][T15666] 
+[  328.273159][T15666] Allocated by task 15640:
+[  328.273163][T15666]  save_stack+0x23/0x80
+[  328.273166][T15666]  __kasan_kmalloc.constprop.0+0xcf/0xe0
+[  328.273169][T15666]  kasan_kmalloc+0x9/0x10
+[  328.273171][T15666]  __kmalloc+0x17e/0x340
+[  328.273174][T15666]  fbcon_set_font+0x33e/0x880
+[  328.273177][T15666]  con_font_op+0xbfe/0x12b0
+[  328.273180][T15666]  vt_ioctl+0x12cf/0x26b0
+[  328.273183][T15666]  tty_ioctl+0x1079/0x16a0
+[  328.273186][T15666]  do_vfs_ioctl+0x97a/0x14e0
+[  328.273188][T15666]  ksys_ioctl+0xab/0xd0
+[  328.273191][T15666]  __x64_sys_ioctl+0x73/0xb0
+[  328.273194][T15666]  do_syscall_64+0xf6/0x240
+[  328.273198][T15666]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  328.273198][T15666] 
+[  328.273200][T15666] Freed by task 15444:
+[  328.273203][T15666]  save_stack+0x23/0x80
+[  328.273206][T15666]  __kasan_slab_free+0x100/0x150
+[  328.273209][T15666]  kasan_slab_free+0xe/0x10
+[  328.273211][T15666]  kfree+0x104/0x2c0
+[  328.273215][T15666]  kvfree+0x61/0x70
+[  328.273218][T15666]  put_files_struct+0x26a/0x340
+[  328.273223][T15666]  exit_files+0x83/0xb0
+[  328.273226][T15666]  do_exit+0xb61/0x2bd0
+[  328.273229][T15666]  do_group_exit+0x135/0x330
+[  328.273233][T15666]  get_signal+0x42b/0x1fc0
+[  328.273236][T15666]  do_signal+0x87/0x1840
+[  328.273240][T15666]  prepare_exit_to_usermode+0x580/0x700
+[  328.273244][T15666]  syscall_return_slowpath+0xfe/0x7f0
+[  328.273247][T15666]  do_syscall_64+0x128/0x240
+[  328.273251][T15666]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  328.273252][T15666] 
+[  328.273254][T15666] The buggy address belongs to the object at ffff8881175ef000
+[  328.273254][T15666]  which belongs to the cache kmalloc-2k of size 2048
+[  328.273258][T15666] The buggy address is located 1036 bytes inside of
+[  328.273258][T15666]  2048-byte region [ffff8881175ef000, ffff8881175ef800)
+[  328.273259][T15666] The buggy address belongs to the page:
+[  328.273262][T15666] page:ffffea00045d7bc0 refcount:1 mapcount:0 mapping:ffff888119c00e00 index:0x0
+[  328.273268][T15666] raw: 017ffe0000000200 ffffea0004322e88 ffffea000460e308 ffff888119c00e00
+[  328.273272][T15666] raw: 0000000000000000 ffff8881175ef000 0000000100000001 0000000000000000
+[  328.273273][T15666] page dumped because: kasan: bad access detected
+[  328.273274][T15666] 
+[  328.273276][T15666] Memory state around the buggy address:
+[  328.273279][T15666]  ffff8881175ef300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[  328.273281][T15666]  ffff8881175ef380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[  328.273284][T15666] >ffff8881175ef400: 00 00 fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[  328.273286][T15666]                          ^
+[  328.273288][T15666]  ffff8881175ef480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[  328.273291][T15666]  ffff8881175ef500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[  328.273292][T15666] ==================================================================
+[  328.273294][T15666] Disabling lock debugging due to kernel taint
+[  328.273322][T15666] Kernel panic - not syncing: panic_on_warn set ...
+[  328.273325][T15666] CPU: 1 PID: 15666 Comm: poc.o Tainted: G    B             5.5.0-rc6+ #1
+[  328.273327][T15666] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[  328.273328][T15666] Call Trace:
+[  328.273331][T15666]  dump_stack+0x197/0x21e
+[  328.273335][T15666]  panic+0x2e3/0x75c
+[  328.273338][T15666]  ? add_taint.cold+0x16/0x16
+[  328.273341][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273344][T15666]  ? fbcon_get_font+0x2b2/0x5e0
+[  328.273348][T15666]  ? preempt_schedule+0x4b/0x60
+[  328.273351][T15666]  ? ___preempt_schedule+0x16/0x18
+[  328.273354][T15666]  ? trace_hardirqs_on+0x52/0x80
+[  328.273358][T15666]  ? fbcon_get_font+0x2b2/0x5e0
+[  328.273361][T15666]  end_report+0x47/0x4f
+[  328.273364][T15666]  __kasan_report.cold+0xe/0x35
+[  328.273367][T15666]  ? fbcon_get_font+0x2b2/0x5e0
+[  328.273371][T15666]  kasan_report+0x12/0x20
+[  328.273374][T15666]  check_memory_region+0x14d/0x1a0
+[  328.273377][T15666]  memcpy+0x24/0x50
+[  328.273382][T15666]  fbcon_get_font+0x2b2/0x5e0
+[  328.273386][T15666]  ? fbcon_resize+0x6c0/0x6c0
+[  328.273389][T15666]  con_font_op+0x22d/0x12b0
+[  328.273393][T15666]  ? lockdep_hardirqs_on+0x421/0x5e0
+[  328.273396][T15666]  ? con_write+0xb0/0xb0
+[  328.273401][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273404][T15666]  ? apparmor_capable+0x1ea/0x470
+[  328.273409][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273413][T15666]  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+[  328.273416][T15666]  ? security_capable+0x92/0xc0
+[  328.273420][T15666]  vt_ioctl+0x12cf/0x26b0
+[  328.273424][T15666]  ? vt_waitactive+0x390/0x390
+[  328.273428][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273431][T15666]  ? mark_lock+0xc2/0x1220
+[  328.273436][T15666]  ? tty_jobctrl_ioctl+0x50/0x1030
+[  328.273439][T15666]  ? vt_waitactive+0x390/0x390
+[  328.273443][T15666]  tty_ioctl+0x1079/0x16a0
+[  328.273446][T15666]  ? tty_fasync+0x390/0x390
+[  328.273450][T15666]  ? count_memcg_events.constprop.0+0xfb/0x1b0
+[  328.273453][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273457][T15666]  ? __lock_acquire+0x8a1/0x4e40
+[  328.273461][T15666]  ? prep_transhuge_page+0xa0/0xa0
+[  328.273464][T15666]  ? __kasan_check_read+0x11/0x20
+[  328.273468][T15666]  ? __fget+0x3a4/0x590
+[  328.273472][T15666]  ? tty_fasync+0x390/0x390
+[  328.273475][T15666]  do_vfs_ioctl+0x97a/0x14e0
+[  328.273480][T15666]  ? compat_ioctl_preallocate+0x220/0x220
+[  328.273483][T15666]  ? __fget+0x3c6/0x590
+[  328.273486][T15666]  ? do_dup2+0x4f0/0x4f0
+[  328.273491][T15666]  ? __sanitizer_cov_trace_const_cmp1+0x1a/0x20
+[  328.273495][T15666]  ? security_file_ioctl+0x8e/0xc0
+[  328.273499][T15666]  ksys_ioctl+0xab/0xd0
+[  328.273503][T15666]  __x64_sys_ioctl+0x73/0xb0
+[  328.273506][T15666]  ? trace_hardirqs_on+0x5b/0x80
+[  328.273509][T15666]  do_syscall_64+0xf6/0x240
+[  328.273513][T15666]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  328.273516][T15666] RIP: 0033:0x45648d
+[  328.273519][T15666] Code: c3 e8 67 22 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+[  328.273521][T15666] RSP: 002b:00007f3ed35cf0b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  328.273524][T15666] RAX: ffffffffffffffda RBX: 00007f3ed35cf640 RCX: 000000000045648d
+[  328.273526][T15666] RDX: 0000000020000140 RSI: 0000000000004b60 RDI: 0000000000000003
+[  328.273528][T15666] RBP: 00007f3ed35cf0e0 R08: 0000000000000000 R09: 0000000000000000
+[  328.273530][T15666] R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3ed35cf640
+[  328.273532][T15666] R13: 0000000000000016 R14: 0000000000418850 R15: 00007f3ed35af000
+[  328.273766][T15666] Kernel Offset: disabled
