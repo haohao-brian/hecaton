@@ -1386,9 +1386,9 @@ void execute_call(int call)
 }
 int main(void)
 {
-  syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
-  setup_binfmt_misc();
-  install_segv_handler();
+  //syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
+  //setup_binfmt_misc();
+  //install_segv_handler();
   for (procid = 0; procid < 6; procid++) {
     // if (fork() == 0) {
     //   use_temporary_dir();
