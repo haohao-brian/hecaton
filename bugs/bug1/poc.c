@@ -3,6 +3,7 @@
 
 #define _GNU_SOURCE
 
+#include <sys/mman.h>
 #include <arpa/inet.h>
 #include <dirent.h>
 #include <endian.h>
@@ -923,7 +924,7 @@ static void setup_cgroups()
   if (mkdir("/syzcgroup/cpu", 0777)) {
   }
   if (mount("none", "/syzcgroup/cpu", "cgroup", 0,
-            "cpuset,cpuacct,perf_event,hugetlb")) {
+            "cpuset,cpuacct,hugetlb")) {
   }
   write_file("/syzcgroup/cpu/cgroup.clone_children", "1");
   if (chmod("/syzcgroup/cpu", 0777)) {
@@ -1384,16 +1385,17 @@ void execute_call(int call)
     break;
   }
 }
+
 int main(void)
 {
-  //syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
-  //setup_binfmt_misc();
-  //install_segv_handler();
+  syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
+  setup_binfmt_misc();
+  install_segv_handler();
   for (procid = 0; procid < 6; procid++) {
-    // if (fork() == 0) {
-    //   use_temporary_dir();
-    //   do_sandbox_none();
-    // }
+     if (fork() == 0) {
+       use_temporary_dir();
+       do_sandbox_none();
+     }
   }
   sleep(1000000);
   return 0;
