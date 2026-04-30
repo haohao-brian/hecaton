@@ -851,7 +851,7 @@ public:
     std::string main_file_str = SM.getFileEntryForID(SM.getMainFileID())->getName().str();
     std::string new_file_str = generate_file_name(main_file_str);
     std::error_code error_code;
-    llvm::raw_fd_ostream outFile(new_file_str, error_code, llvm::sys::fs::F_None);
+    llvm::raw_fd_ostream outFile(new_file_str, error_code, llvm::sys::fs::OF_None);
     // Now emit the rewritten buffer.
     TheRewriter.getEditBuffer(SM.getMainFileID()).write(outFile);
     outFile.close();
