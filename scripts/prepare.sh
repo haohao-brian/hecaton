@@ -21,6 +21,6 @@ cd ..
 
 python3 scripts/instrument_makefiles.py bugs/$1/
 
-MYCC_dir=$(cd "compilers/gcc-10/bin"; printf %s "$PWD")
-MYCC=$MYCC_dir/gcc
+MYCC_dir=$(cd "compilers/clang/bin"; printf %s "$PWD")
+MYCC=$MYCC_dir/clang
 $MYCC -static -lpthread -pthread bugs/$1/poc.c -o bugs/$1/poc.o
