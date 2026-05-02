@@ -42,11 +42,42 @@ for line in lines:
 
 file_name3 = 'modified_kernels/baseline_kernel/build_clang.sh'
 file3 = open(file_name3, 'a+')
+
 file_name4 = 'modified_kernels/pass1_kernel/build_clang.sh'
 file4 = open(file_name4, 'a+')
+
+header = '''#!/usr/bin/env bash
+
+set -e
+
+MYClang_dir=$(cd "../../compilers/clang/bin"; printf %s "$PWD")
+
+MYClang=$MYClang_dir/clang
+
+export CLANG_SYZBOT=$MYClang
+
+MYCC=$CLANG_SYZBOT
+
+cp ../../kernel_configs/linux-next-default-config .config
+
+'''
+
+file3.seek(0, os.SEEK_END)
+if file3.tell() == 0:
+    file3.write(header)
+
+file4.seek(0, os.SEEK_END)
+if file4.tell() == 0:
+    file4.write(header)
+
 for line in lines:
-    dir1 = line.rstrip('\n');
-    str1 = '\nmake CC=$MYCC -j30 -k '+ dir1  +' 2>&1 | tee build.log\n'
+    dir1 = line.rstrip('\n')
+    str1 = '\nmake ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- LLVM=1 CC=$MYCC HOSTCC=$MYCC -j$(nproc) -k ' + dir1 + ' 2>&1 | tee build.log\n'
     file3.write(str1)
     file4.write(str1)
 
+file3.close()
+file4.close()
+
+os.chmod(file_name3, 0o755)
+os.chmod(file_name4, 0o755)
