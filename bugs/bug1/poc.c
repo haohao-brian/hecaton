@@ -1381,6 +1381,14 @@ void execute_call(int call)
     NONFAILING(*(uint16_t*)0x20000146 = 5);
     NONFAILING(*(uint16_t*)0x20000148 = 0);
     NONFAILING(*(uint16_t*)0x2000014a = 0);
+    /*
+    * v_rows = 0
+    * v_cols = 0x101 = 257
+    * v_scrollsize = 0
+    * v_clin = 5
+    * v_vlin = 0
+    * v_flin = 0
+    */
     syscall(__NR_ioctl, r[2], 0x560aul, 0x20000140ul);
     break;
   }
