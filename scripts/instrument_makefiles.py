@@ -56,7 +56,7 @@ MYClang=$MYClang_dir/clang
 
 export CLANG_SYZBOT=$MYClang
 
-MYCC=$CLANG_SYZBOT
+MYCC=/usr/bin/clang-14
 
 cp ../../kernel_configs/linux-next-default-config .config
 
@@ -72,7 +72,7 @@ if file4.tell() == 0:
 
 for line in lines:
     dir1 = line.rstrip('\n')
-    str1 = '\nmake ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- LLVM=1 CC=$MYCC HOSTCC=$MYCC -j$(nproc) -k ' + dir1 + ' 2>&1 | tee build.log\n'
+    str1 = '\nmake ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- LLVM=1 CC=$MYCC HOSTCC=$MYCC -j$(nproc) KCFLAGS="-march=armv8.5-a+pauth+memtag -flegacy-pass-manager -Xclang -load -Xclang $(realpath scripts/pac-mte/libPMCPass.so)" -k ' + dir1 + ' 2>&1 | tee build.log\n'
     file3.write(str1)
     file4.write(str1)
 
